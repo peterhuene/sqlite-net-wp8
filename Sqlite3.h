@@ -26,8 +26,8 @@ namespace Sqlite
         static int sqlite3_bind_int(Platform::IntPtr statement, int index, int value);
         static int sqlite3_bind_int64(Platform::IntPtr statement, int index, int64 value);
         static int sqlite3_bind_double(Platform::IntPtr statement, int index, double value);
-        static int sqlite3_bind_text(Platform::IntPtr statement, int index, Platform::String^ value);
-        static int sqlite3_bind_blob(Platform::IntPtr statement, int index, const Platform::Array<uint8>^ value);	
+        static int sqlite3_bind_text(Platform::IntPtr statement, int index, Platform::String^ value, int length);
+        static int sqlite3_bind_blob(Platform::IntPtr statement, int index, const Platform::Array<uint8>^ value, int length);	
         static int sqlite3_column_count(Platform::IntPtr statement);
         static Platform::String^ sqlite3_column_name(Platform::IntPtr statement, int index);
         static int sqlite3_column_type(Platform::IntPtr statement, int index);

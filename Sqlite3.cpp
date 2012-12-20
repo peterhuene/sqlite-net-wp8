@@ -186,16 +186,16 @@ int Sqlite3::sqlite3_bind_double(IntPtr statement, int index, double value)
     return ::sqlite3_bind_double(intptr_cast<sqlite3_stmt*>(statement), index, value);
 }
 
-int Sqlite3::sqlite3_bind_text(IntPtr statement, int index, String^ value)
+int Sqlite3::sqlite3_bind_text(IntPtr statement, int index, String^ value, int length)
 {
     // Use transient here so that the data gets copied by sqlite
-    return ::sqlite3_bind_text16(intptr_cast<sqlite3_stmt*>(statement), index, value->Data(), value->Length(), SQLITE_TRANSIENT);
+    return ::sqlite3_bind_text16(intptr_cast<sqlite3_stmt*>(statement), index, value->Data(), length == -1 ? value->Length() : 0, SQLITE_TRANSIENT);
 }
 
-int Sqlite3::sqlite3_bind_blob(IntPtr statement, int index, const Array<uint8>^ value)
+int Sqlite3::sqlite3_bind_blob(IntPtr statement, int index, const Array<uint8>^ value, int length)
 {
     // Use transient here so that the data gets copied by sqlite
-    return ::sqlite3_bind_blob(intptr_cast<sqlite3_stmt*>(statement), index, value->Data, value->Length, SQLITE_TRANSIENT);
+    return ::sqlite3_bind_blob(intptr_cast<sqlite3_stmt*>(statement), index, value->Data, length == -1 ? value->Length : length, SQLITE_TRANSIENT);
 }
 
 int Sqlite3::sqlite3_column_count(IntPtr statement)
