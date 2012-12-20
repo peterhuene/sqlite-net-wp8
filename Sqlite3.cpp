@@ -1,7 +1,5 @@
 ﻿#include "pch.h"
 #include "Sqlite3.h"
-#include "windows.h"
-#include <vector>
 
 using namespace Sqlite;
 using namespace Platform;
