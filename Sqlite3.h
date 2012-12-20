@@ -4,38 +4,83 @@
 namespace Sqlite
 {
     /*
+    Utility class for wrapping sqlite3 "handles".
+    */
+    public ref class Database sealed
+    {
+    internal:
+    internal:
+        Database(sqlite3* db) : _handle(db)
+        {
+        }
+
+        property sqlite3* Handle
+        { 
+            sqlite3* get()
+            {
+                return _handle;
+            }
+        }
+
+    private:
+        sqlite3* _handle;
+    };
+
+    /*
+    Utility class for wrapping sqlite3_stmt "handles".
+    */
+    public ref class Statement sealed
+    {
+    internal:
+        Statement(sqlite3_stmt* statement) : _handle(statement)
+        {
+        }
+
+        property sqlite3_stmt* Handle
+        { 
+            sqlite3_stmt* get()
+            {
+                return _handle;
+            }
+        }
+
+    private:
+        sqlite3_stmt* _handle;
+    };
+
+    /*
     This class is simply a C++/CX wrapper around sqlite3 exports that sqlite.net depends on.
     Consult the sqlite documentation on what they do.
     */
     public ref class Sqlite3 sealed
     {
     public:
-        static int sqlite3_open(Platform::String^ filename, Platform::IntPtr* db);
-        static int sqlite3_open_v2(Platform::String^ filename, Platform::IntPtr* db, int flags, Platform::String^ zVfs);
-        static int sqlite3_close(Platform::IntPtr db);
-        static int sqlite3_busy_timeout(Platform::IntPtr db, int miliseconds);
-        static int sqlite3_changes(Platform::IntPtr db);
-        static int sqlite3_prepare_v2(Platform::IntPtr db, Platform::String^ query, Platform::IntPtr* statement);
-        static int sqlite3_step(Platform::IntPtr statement);
-        static int sqlite3_reset(Platform::IntPtr statement);
-        static int sqlite3_finalize(Platform::IntPtr statement);
-        static int64 sqlite3_last_insert_rowid(Platform::IntPtr db);
-        static Platform::String^ sqlite3_errmsg(Platform::IntPtr db);
-        static int sqlite3_bind_parameter_index(Platform::IntPtr statement, Platform::String^ name);
-        static int sqlite3_bind_null(Platform::IntPtr statement, int index);
-        static int sqlite3_bind_int(Platform::IntPtr statement, int index, int value);
-        static int sqlite3_bind_int64(Platform::IntPtr statement, int index, int64 value);
-        static int sqlite3_bind_double(Platform::IntPtr statement, int index, double value);
-        static int sqlite3_bind_text(Platform::IntPtr statement, int index, Platform::String^ value, int length);
-        static int sqlite3_bind_blob(Platform::IntPtr statement, int index, const Platform::Array<uint8>^ value, int length);	
-        static int sqlite3_column_count(Platform::IntPtr statement);
-        static Platform::String^ sqlite3_column_name(Platform::IntPtr statement, int index);
-        static int sqlite3_column_type(Platform::IntPtr statement, int index);
-        static int sqlite3_column_int(Platform::IntPtr statement, int index);
-        static int64 sqlite3_column_int64(Platform::IntPtr statement, int index);
-        static double sqlite3_column_double(Platform::IntPtr statement, int index);
-        static Platform::String^ sqlite3_column_text(Platform::IntPtr statement, int index);
-        static Platform::Array<uint8>^ sqlite3_column_blob(Platform::IntPtr statement, int index);
-        static int sqlite3_column_bytes(Platform::IntPtr statement, int index);
+        static int sqlite3_open(Platform::String^ filename, Database^* db);
+        static int sqlite3_open_v2(Platform::String^ filename, Database^* db, int flags, Platform::String^ zVfs);
+        static int sqlite3_close(Database^ db);
+        static int sqlite3_busy_timeout(Database^ db, int miliseconds);
+        static int sqlite3_changes(Database^ db);
+        static int sqlite3_prepare_v2(Database^ db, Platform::String^ query, Statement^* statement);
+        static int sqlite3_step(Statement^ statement);
+        static int sqlite3_reset(Statement^ statement);
+        static int sqlite3_finalize(Statement^ statement);
+        static int64 sqlite3_last_insert_rowid(Database^ db);
+        static Platform::String^ sqlite3_errmsg(Database^ db);
+        static int sqlite3_bind_parameter_index(Statement^ statement, Platform::String^ name);
+        static int sqlite3_bind_null(Statement^ statement, int index);
+        static int sqlite3_bind_int(Statement^ statement, int index, int value);
+        static int sqlite3_bind_int64(Statement^ statement, int index, int64 value);
+        static int sqlite3_bind_double(Statement^ statement, int index, double value);
+        static int sqlite3_bind_text(Statement^ statement, int index, Platform::String^ value, int length);
+        static int sqlite3_bind_blob(Statement^ statement, int index, const Platform::Array<uint8>^ value, int length);	
+        static int sqlite3_column_count(Statement^rstatement);
+        static Platform::String^ sqlite3_column_name(Statement^ statement, int index);
+        static int sqlite3_column_type(Statement^ statement, int index);
+        static int sqlite3_column_int(Statement^ statement, int index);
+        static int64 sqlite3_column_int64(Statement^ statement, int index);
+        static double sqlite3_column_double(Statement^ statement, int index);
+        static Platform::String^ sqlite3_column_text(Statement^ statement, int index);
+        static Platform::Array<uint8>^ sqlite3_column_blob(Statement^, int index);
+        static int sqlite3_column_bytes(Statement^ statement, int index);
     };
 }

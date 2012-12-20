@@ -7,11 +7,10 @@ using namespace Sqlite;
 using namespace Platform;
 using namespace std;
 
-const int Error = 1;
-
 vector<char> convert_to_utf8_buffer(String^ str)
 {
-    if (!str || str->Length() == 0)
+    // A null value cannot be marshalled for Platform::String^, so they should never be null
+    if (str->IsEmpty())
     {
         return vector<char>();
     }
@@ -41,15 +40,15 @@ String^ convert_to_string(char const* str)
     }
 
     // Get the size of the wide string
-    int size = MultiByteToWideChar(CP_UTF8, WC_ERR_INVALID_CHARS, str, -1, nullptr, 0);
+    int size = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, str, -1, nullptr, 0);
     if (size == 0)
     {
         return ref new String();
     }
 
     // Allocate the buffer and do the conversion
-    vector<wchar_t> buffer(size + 1 /* null */);
-    if (MultiByteToWideChar(CP_UTF8, WC_ERR_INVALID_CHARS, str, -1, buffer.data(), size) == 0)
+    vector<wchar_t> buffer(size /* already includes null from pasing -1 above */);
+    if (MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, str, -1, buffer.data(), size) == 0)
     {
         return ref new String();
     }
@@ -57,198 +56,198 @@ String^ convert_to_string(char const* str)
     return ref new String(buffer.data());
 }
 
-template<typename T> T intptr_cast(IntPtr p)
+int Sqlite3::sqlite3_open(String^ filename, Database^* db)
 {
-    return reinterpret_cast<T>(p.operator void *(p));
-}
-
-int Sqlite3::sqlite3_open(String^ filename, IntPtr* db)
-{
-    if (!filename || !db)
-    {
-        return Error;
-    }
-
     auto filename_buffer = convert_to_utf8_buffer(filename);
-    if (filename_buffer.empty())
-    {
-        return Error;
-    }
 
     // Use sqlite3_open instead of sqlite3_open16 so that the default code page for stored strings is UTF-8 and not UTF-16
     sqlite3* actual_db = nullptr;
-    int result = ::sqlite3_open(filename_buffer.data(), &actual_db);
-    *db = ref new IntPtr(actual_db);
+    int result = ::sqlite3_open(filename_buffer.empty() ? nullptr : filename_buffer.data(), &actual_db);
+    if (db)
+    {
+        // If they didn't give us a pointer, the caller has leaked
+        *db = ref new Database(actual_db);
+    }
     return result;
 }
 
-int Sqlite3::sqlite3_open_v2(String^ filename, IntPtr* db, int flags, String^ zVfs)
+int Sqlite3::sqlite3_open_v2(String^ filename, Database^* db, int flags, String^ zVfs)
 {
-    if (!filename || !db)
-    {
-        return Error;
-    }
-
     auto filename_buffer = convert_to_utf8_buffer(filename);
-    if (filename_buffer.empty())
-    {
-        return Error;
-    }
-
     auto zVfs_buffer = convert_to_utf8_buffer(zVfs);
 
     sqlite3* actual_db = nullptr;
-    int result = ::sqlite3_open_v2(filename_buffer.data(), &actual_db, flags, zVfs_buffer.empty() ? nullptr : zVfs_buffer.data());
-    *db = ref new IntPtr(actual_db);
-    return result;
-}
-
-int Sqlite3::sqlite3_close(IntPtr db)
-{
-    return::sqlite3_close(intptr_cast<sqlite3*>(db));
-}
-
-int Sqlite3::sqlite3_busy_timeout(IntPtr db, int miliseconds)
-{
-    return ::sqlite3_busy_timeout(intptr_cast<sqlite3*>(db), miliseconds);
-}
-
-int Sqlite3::sqlite3_changes(IntPtr db)
-{
-    return ::sqlite3_changes(intptr_cast<sqlite3*>(db));
-}
-
-int Sqlite3::sqlite3_prepare_v2(IntPtr db, String^ query, IntPtr* statement)
-{
-    if (!query || !statement)
+    int result = ::sqlite3_open_v2(
+        filename_buffer.empty() ? "" : filename_buffer.data(), 
+        &actual_db, 
+        flags, 
+        zVfs_buffer.empty() ? nullptr : zVfs_buffer.data());
+    if (db)
     {
-        return Error;
+        // If they didn't give us a pointer, the caller has leaked
+        *db = ref new Database(actual_db);
     }
-
-    sqlite3_stmt* actual_statement = nullptr;
-    int result = ::sqlite3_prepare16_v2(intptr_cast<sqlite3*>(db), query->Data(), query->Length() * sizeof(wchar_t) /* in bytes */, &actual_statement, nullptr);
-    *statement = ref new IntPtr(actual_statement);
     return result;
 }
 
-int Sqlite3::sqlite3_step(IntPtr statement)
+int Sqlite3::sqlite3_close(Database^ db)
 {
-    return ::sqlite3_step(intptr_cast<sqlite3_stmt*>(statement));
+    return::sqlite3_close(db ? db->Handle : nullptr);
 }
 
-int Sqlite3::sqlite3_reset(IntPtr statement)
+int Sqlite3::sqlite3_busy_timeout(Database^ db, int miliseconds)
 {
-    return ::sqlite3_reset(intptr_cast<sqlite3_stmt*>(statement));
+    return ::sqlite3_busy_timeout(db ? db->Handle : nullptr, miliseconds);
 }
 
-int Sqlite3::sqlite3_finalize(IntPtr statement)
+int Sqlite3::sqlite3_changes(Database^ db)
 {
-    return ::sqlite3_finalize(intptr_cast<sqlite3_stmt*>(statement));
+    return ::sqlite3_changes(db ? db->Handle : nullptr);
 }
 
-int64 Sqlite3::sqlite3_last_insert_rowid(IntPtr db)
+int Sqlite3::sqlite3_prepare_v2(Database^ db, String^ query, Statement^* statement)
 {
-    return ::sqlite3_last_insert_rowid(intptr_cast<sqlite3*>(db));
+    sqlite3_stmt* actual_statement = nullptr;
+    int result = ::sqlite3_prepare16_v2(
+        db ? db->Handle : nullptr, 
+        query->IsEmpty() ? L"" : query->Data(), 
+        -1, 
+        &actual_statement, 
+        nullptr);
+    if (statement)
+    {
+        // If they didn't give us a pointer, the caller has leaked
+        *statement = ref new Statement(actual_statement);
+    }
+    return result;
 }
 
-String^ Sqlite3::sqlite3_errmsg(IntPtr db)
+int Sqlite3::sqlite3_step(Statement^ statement)
 {
-    return convert_to_string(::sqlite3_errmsg(intptr_cast<sqlite3*>(db)));
+    return ::sqlite3_step(statement ? statement->Handle : nullptr);
 }
 
-int Sqlite3::sqlite3_bind_parameter_index(IntPtr statement, String^ name)
+int Sqlite3::sqlite3_reset(Statement^ statement)
+{
+    return ::sqlite3_reset(statement ? statement->Handle : nullptr);
+}
+
+int Sqlite3::sqlite3_finalize(Statement^ statement)
+{
+    return ::sqlite3_finalize(statement ? statement->Handle : nullptr);
+}
+
+int64 Sqlite3::sqlite3_last_insert_rowid(Database^ db)
+{
+    return ::sqlite3_last_insert_rowid(db ? db->Handle : nullptr);
+}
+
+String^ Sqlite3::sqlite3_errmsg(Database^ db)
+{
+    return convert_to_string(::sqlite3_errmsg(db ? db->Handle : nullptr));
+}
+
+int Sqlite3::sqlite3_bind_parameter_index(Statement^ statement, String^ name)
 {
     auto name_buffer = convert_to_utf8_buffer(name);
-    if (name_buffer.empty())
-    {
-        return Error;
-    }
-    return ::sqlite3_bind_parameter_index(intptr_cast<sqlite3_stmt*>(statement), name_buffer.data());
+    return ::sqlite3_bind_parameter_index(
+        statement ? statement->Handle : nullptr, 
+        name_buffer.empty() ? "" : name_buffer.data());
 }
 
-int Sqlite3::sqlite3_bind_null(IntPtr statement, int index)
+int Sqlite3::sqlite3_bind_null(Statement^ statement, int index)
 {
-    return ::sqlite3_bind_null(intptr_cast<sqlite3_stmt*>(statement), index);
+    return ::sqlite3_bind_null(statement ? statement->Handle : nullptr, index);
 }
 
-int Sqlite3::sqlite3_bind_int(IntPtr statement, int index, int value)
+int Sqlite3::sqlite3_bind_int(Statement^ statement, int index, int value)
 {
-    return ::sqlite3_bind_int(intptr_cast<sqlite3_stmt*>(statement), index, value);
+    return ::sqlite3_bind_int(statement ? statement->Handle : nullptr, index, value);
 }
 
-int Sqlite3::sqlite3_bind_int64(IntPtr statement, int index, int64 value)
+int Sqlite3::sqlite3_bind_int64(Statement^ statement, int index, int64 value)
 {
-    return ::sqlite3_bind_int64(intptr_cast<sqlite3_stmt*>(statement), index, value);
+    return ::sqlite3_bind_int64(statement ? statement->Handle : nullptr, index, value);
 }
 
-int Sqlite3::sqlite3_bind_double(IntPtr statement, int index, double value)
+int Sqlite3::sqlite3_bind_double(Statement^ statement, int index, double value)
 {
-    return ::sqlite3_bind_double(intptr_cast<sqlite3_stmt*>(statement), index, value);
+    return ::sqlite3_bind_double(statement ? statement->Handle : nullptr, index, value);
 }
 
-int Sqlite3::sqlite3_bind_text(IntPtr statement, int index, String^ value, int length)
+int Sqlite3::sqlite3_bind_text(Statement^ statement, int index, String^ value, int length)
 {
     // Use transient here so that the data gets copied by sqlite
-    return ::sqlite3_bind_text16(intptr_cast<sqlite3_stmt*>(statement), index, value->Data(), length == -1 ? value->Length() : 0, SQLITE_TRANSIENT);
+    return ::sqlite3_bind_text16(
+        statement ? statement->Handle : nullptr, 
+        index, 
+        value->IsEmpty() ? L"" : value->Data(),
+        length == -1 ? value->Length() : 0, 
+        SQLITE_TRANSIENT);
 }
 
-int Sqlite3::sqlite3_bind_blob(IntPtr statement, int index, const Array<uint8>^ value, int length)
+int Sqlite3::sqlite3_bind_blob(Statement^ statement, int index, const Array<uint8>^ value, int length)
 {
     // Use transient here so that the data gets copied by sqlite
-    return ::sqlite3_bind_blob(intptr_cast<sqlite3_stmt*>(statement), index, value->Data, length == -1 ? value->Length : length, SQLITE_TRANSIENT);
+    return ::sqlite3_bind_blob(
+        statement ? statement->Handle : nullptr, 
+        index, 
+        value ? value->Data : nullptr, 
+        length == -1 ? value->Length : length, 
+        SQLITE_TRANSIENT);
 }
 
-int Sqlite3::sqlite3_column_count(IntPtr statement)
+int Sqlite3::sqlite3_column_count(Statement^ statement)
 {
-    return ::sqlite3_column_count(intptr_cast<sqlite3_stmt*>(statement));
+    return ::sqlite3_column_count(statement ? statement->Handle : nullptr);
 }
 
-String^ Sqlite3::sqlite3_column_name(IntPtr statement, int index)
+String^ Sqlite3::sqlite3_column_name(Statement^ statement, int index)
 {
-    return convert_to_string(::sqlite3_column_name(intptr_cast<sqlite3_stmt*>(statement), index));
+    return convert_to_string(::sqlite3_column_name(statement ? statement->Handle : nullptr, index));
 }
 
-int Sqlite3::sqlite3_column_type(IntPtr statement, int index)
+int Sqlite3::sqlite3_column_type(Statement^ statement, int index)
 {
-    return ::sqlite3_column_type(intptr_cast<sqlite3_stmt*>(statement), index);
+    return ::sqlite3_column_type(statement ? statement->Handle : nullptr, index);
 }
 
-int Sqlite3::sqlite3_column_int(IntPtr statement, int index)
+int Sqlite3::sqlite3_column_int(Statement^ statement, int index)
 {
-    return ::sqlite3_column_int(intptr_cast<sqlite3_stmt*>(statement), index);
+    return ::sqlite3_column_int(statement ? statement->Handle : nullptr, index);
 }
 
-int64 Sqlite3::sqlite3_column_int64(IntPtr statement, int index)
+int64 Sqlite3::sqlite3_column_int64(Statement^ statement, int index)
 {
-    return ::sqlite3_column_int64(intptr_cast<sqlite3_stmt*>(statement), index);
+    return ::sqlite3_column_int64(statement ? statement->Handle : nullptr, index);
 }
 
-double Sqlite3::sqlite3_column_double(IntPtr statement, int index)
+double Sqlite3::sqlite3_column_double(Statement^ statement, int index)
 {
-    return ::sqlite3_column_double(intptr_cast<sqlite3_stmt*>(statement), index);
+    return ::sqlite3_column_double(statement ? statement->Handle : nullptr, index);
 }
 
-String^ Sqlite3::sqlite3_column_text(IntPtr statement, int index)
+String^ Sqlite3::sqlite3_column_text(Statement^ statement, int index)
 {
-    return ref new String(reinterpret_cast<wchar_t const*>(::sqlite3_column_text16(intptr_cast<sqlite3_stmt*>(statement), index)));
+    return ref new String(reinterpret_cast<wchar_t const*>(::sqlite3_column_text16(statement ? statement->Handle : nullptr, index)));
 }
 
-Array<uint8>^ Sqlite3::sqlite3_column_blob(IntPtr statement, int index)
+Array<uint8>^ Sqlite3::sqlite3_column_blob(Statement^ statement, int index)
 {
     int count = Sqlite3::sqlite3_column_bytes(statement, index);
     Array<uint8>^ blob = ref new Array<uint8>(count < 0 ? 0 : count);
 
     if (count > 0)
     {
-        auto data = static_cast<uint8 const*>(::sqlite3_column_blob(intptr_cast<sqlite3_stmt*>(statement), index));
+        auto data = static_cast<uint8 const*>(::sqlite3_column_blob(statement ? statement->Handle : nullptr, index));
         std::copy(data, data + count, blob->Data);
     }
 
     return blob;
 }
 
-int Sqlite3::sqlite3_column_bytes(IntPtr statement, int index)
+int Sqlite3::sqlite3_column_bytes(Statement^ statement, int index)
 {
-    return ::sqlite3_column_bytes(intptr_cast<sqlite3_stmt*>(statement), index);
+    return ::sqlite3_column_bytes(statement ? statement->Handle : nullptr, index);
 }
 
