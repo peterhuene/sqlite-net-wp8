@@ -10,7 +10,7 @@ Requirements
 
 * Visual Studio 2012
 * Windows Phone 8.0 SDK
-* SQLite for Windows Phone (install via the Tools -> Extensions menu).
+* SQLite for Windows Phone (install via the "Tools -> Extensions and Updates" menu item in Visual Studio).
 
 Remarks
 ======
@@ -19,7 +19,7 @@ This library is intended to be used with [sqlite-net](https://github.com/praecla
 
 However, sqlite-net currently won't work with this library.  It has a dependency on [csharp-sqlite](http://code.google.com/p/csharp-sqlite/) instead, which is a C# re-implementation of sqlite.
 
-Instead, [use my fork of sqlite-net](https://github.com/peterhuene/sqlite-net) that does.
+Instead, [use my fork of sqlite-net](https://github.com/peterhuene/sqlite-net) that does.  I'll work on getting the sqlite-net changes pushed upstream (needs more work to make it build against both sqlite-net-wp8 and csharp-sqlite),
 
 Using sqlite-net-wp8
 ====================
