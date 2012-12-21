@@ -10,21 +10,24 @@ vector<char> convert_to_utf8_buffer(String^ str)
     // A null value cannot be marshalled for Platform::String^, so they should never be null
     if (str->IsEmpty())
     {
-        return vector<char>();
+        // Return an "empty" string
+        return vector<char>(1);
     }
 
     // Get the size of the utf-8 string
     int size = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, str->Data(), str->Length(), nullptr, 0, nullptr, nullptr);
     if (size == 0)
     {
-        return vector<char>();
+        // Not much we can do here; just return an empty string
+        return vector<char>(1);
     }
 
     // Allocate the buffer and do the conversion
     vector<char> buffer(size + 1 /* null */);
     if (WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, str->Data(), str->Length(), buffer.data(), size, nullptr, nullptr) == 0)
     {
-        return vector<char>();
+        // Not much we can do here; just return an empty string
+        return vector<char>(1);
     }
 
     return std::move(buffer);
@@ -60,7 +63,7 @@ int Sqlite3::sqlite3_open(String^ filename, Database^* db)
 
     // Use sqlite3_open instead of sqlite3_open16 so that the default code page for stored strings is UTF-8 and not UTF-16
     sqlite3* actual_db = nullptr;
-    int result = ::sqlite3_open(filename_buffer.empty() ? nullptr : filename_buffer.data(), &actual_db);
+    int result = ::sqlite3_open(filename_buffer.data(), &actual_db);
     if (db)
     {
         // If they didn't give us a pointer, the caller has leaked
@@ -76,9 +79,9 @@ int Sqlite3::sqlite3_open_v2(String^ filename, Database^* db, int flags, String^
 
     sqlite3* actual_db = nullptr;
     int result = ::sqlite3_open_v2(
-        filename_buffer.empty() ? "" : filename_buffer.data(), 
-        &actual_db, 
-        flags, 
+        filename_buffer.data(),
+        &actual_db,
+        flags,
         zVfs_buffer.empty() ? nullptr : zVfs_buffer.data());
     if (db)
     {
@@ -150,7 +153,7 @@ int Sqlite3::sqlite3_bind_parameter_index(Statement^ statement, String^ name)
     auto name_buffer = convert_to_utf8_buffer(name);
     return ::sqlite3_bind_parameter_index(
         statement ? statement->Handle : nullptr, 
-        name_buffer.empty() ? "" : name_buffer.data());
+        name_buffer.data());
 }
 
 int Sqlite3::sqlite3_bind_null(Statement^ statement, int index)
