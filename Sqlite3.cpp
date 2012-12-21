@@ -183,7 +183,7 @@ int Sqlite3::sqlite3_bind_text(Statement^ statement, int index, String^ value, i
         statement ? statement->Handle : nullptr, 
         index, 
         value->IsEmpty() ? L"" : value->Data(),
-        length == -1 ? value->Length() * sizeof(wchar_t) : length, 
+        length < 0 ? value->Length() * sizeof(wchar_t) : length,
         SQLITE_TRANSIENT);
 }
 
@@ -194,7 +194,7 @@ int Sqlite3::sqlite3_bind_blob(Statement^ statement, int index, const Array<uint
         statement ? statement->Handle : nullptr, 
         index, 
         value ? value->Data : nullptr, 
-        length == -1 ? value->Length : length, 
+        length < 0 ? value->Length : length,
         SQLITE_TRANSIENT);
 }
 
