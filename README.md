@@ -28,4 +28,10 @@ Using sqlite-net-wp8
 * Add the Sqlite.vcxproj project to your solution (File -> Add -> Existing Project).
 * From your Windows Phone project, add a project reference to the Sqlite project (Project -> Add Reference -> Solution -> Projects).
 * Clone or copy the [sqlite-net](https://github.com/peterhuene/sqlite-net) source files (src/SQLite.cs and src/SQLiteAsync.cs) into your Windows Phone project.
+* Add "USE_WP8_NATIVE_SQLITE" as a conditional build settings to your source files (without this, SQLite will use csharp-sqlite):
+    * Project -> Properties
+    * Click on the Build tab.
+    * In the "Configuration" dropdown, select "All configurations".
+    * In the "Platform" dropdown, select "All platforms".
+    * Append ";USE_WP8_NATIVE_SQLITE" to the "Conditional compilation symboles" textbox.
 * Use sqlite-net as you normally would.
