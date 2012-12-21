@@ -180,7 +180,7 @@ int Sqlite3::sqlite3_bind_text(Statement^ statement, int index, String^ value, i
         statement ? statement->Handle : nullptr, 
         index, 
         value->IsEmpty() ? L"" : value->Data(),
-        length == -1 ? value->Length() : 0, 
+        length == -1 ? value->Length() * sizeof(wchar_t) : length, 
         SQLITE_TRANSIENT);
 }
 
