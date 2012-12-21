@@ -15,4 +15,7 @@
     <ClInclude Include="Sqlite3.h" />
     <ClInclude Include="Headers\sqlite3.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
 </Project>

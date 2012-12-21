@@ -82,7 +82,7 @@ int Sqlite3::sqlite3_open_v2(String^ filename, Database^* db, int flags, String^
         filename_buffer.data(),
         &actual_db,
         flags,
-        zVfs_buffer.empty() ? nullptr : zVfs_buffer.data());
+        zVfs_buffer.size() <= 1 /* empty string */ ? nullptr : zVfs_buffer.data());
     if (db)
     {
         // If they didn't give us a pointer, the caller has leaked
