@@ -19,7 +19,7 @@ This library is intended to be used with [sqlite-net](https://github.com/praecla
 
 However, sqlite-net currently won't work with this library as it has a dependency on [csharp-sqlite](http://code.google.com/p/csharp-sqlite/) (a reimplementation of SQLite in C#) instead of this library.
 
-[Use my fork of sqlite-net](https://github.com/peterhuene/sqlite-net) that does depend on this library.  I'll work on getting the sqlite-net changes pushed upstream (needs more work to make it build against both sqlite-net-wp8 and csharp-sqlite),
+[Use my fork of sqlite-net](https://github.com/peterhuene/sqlite-net) that does depend on this library.  There is a pending pull request on the upstream sqlite-net for these changes,
 
 Using sqlite-net-wp8
 ====================
