@@ -262,3 +262,10 @@ int Sqlite3::sqlite3_column_bytes(Statement^ statement, int index)
     return ::sqlite3_column_bytes(statement ? statement->Handle : nullptr, index);
 }
 
+int Sqlite3::sqlite3_enable_load_extension(Database^ db, int onoff)
+{
+    // Dummy stub to make sqlite-net work (note: sqlite-net doesn't use it directly)
+    // While sqlite3_enable_load_extension is declared in sqlite3.h, 
+    // sqlite3.lib provided by "SQL For Windows Phone" doesn't seem to define it
+    return 1;	// Error
+}
