@@ -53,16 +53,16 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(MSBuildProgramFiles32)\Microsoft SDKs\Windows Phone\v8.0\ExtensionSDKs\SQLite.WP80\3.7.16\DesignTime\CommonConfiguration\Neutral\SQLite.WP80.props" />
+    <Import Project="$(MSBuildProgramFiles32)\Microsoft SDKs\Windows Phone\v8.0\ExtensionSDKs\SQLite.WP80\3.7.16.1\DesignTime\CommonConfiguration\Neutral\SQLite.WP80.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <Import Project="$(MSBuildProgramFiles32)\Microsoft SDKs\Windows Phone\v8.0\ExtensionSDKs\SQLite.WP80\3.7.16\DesignTime\CommonConfiguration\Neutral\SQLite.WP80.props" />
+    <Import Project="$(MSBuildProgramFiles32)\Microsoft SDKs\Windows Phone\v8.0\ExtensionSDKs\SQLite.WP80\3.7.16.1\DesignTime\CommonConfiguration\Neutral\SQLite.WP80.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(MSBuildProgramFiles32)\Microsoft SDKs\Windows Phone\v8.0\ExtensionSDKs\SQLite.WP80\3.7.16\DesignTime\CommonConfiguration\Neutral\SQLite.WP80.props" />
+    <Import Project="$(MSBuildProgramFiles32)\Microsoft SDKs\Windows Phone\v8.0\ExtensionSDKs\SQLite.WP80\3.7.16.1\DesignTime\CommonConfiguration\Neutral\SQLite.WP80.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
-    <Import Project="$(MSBuildProgramFiles32)\Microsoft SDKs\Windows Phone\v8.0\ExtensionSDKs\SQLite.WP80\3.7.16\DesignTime\CommonConfiguration\Neutral\SQLite.WP80.props" />
+    <Import Project="$(MSBuildProgramFiles32)\Microsoft SDKs\Windows Phone\v8.0\ExtensionSDKs\SQLite.WP80\3.7.16.1\DesignTime\CommonConfiguration\Neutral\SQLite.WP80.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -146,7 +146,7 @@
     <ClCompile Include="Sqlite3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="SQLite.WP80, Version=3.7.16" />
+    <SDKReference Include="SQLite.WP80, Version=3.7.16.1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
