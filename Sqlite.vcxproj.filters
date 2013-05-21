@@ -8,12 +8,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Sqlite3.cpp" />
+    <ClCompile Include="SqliteWP8.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Sqlite3.h" />
-    <ClInclude Include="Headers\sqlite3.h" />
+    <ClInclude Include="SqliteWP8.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

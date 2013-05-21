@@ -9,7 +9,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 #include "pch.h"
-#include "Sqlite3.h"
+#include "SqliteWP8.h"
 
 using namespace Sqlite;
 using namespace Platform;
