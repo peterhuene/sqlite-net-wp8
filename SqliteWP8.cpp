@@ -40,7 +40,7 @@ vector<char> convert_to_utf8_buffer(String^ str)
         return vector<char>(1);
     }
 
-    return std::move(buffer);
+    return buffer;
 }
 
 String^ convert_to_string(char const* str)
