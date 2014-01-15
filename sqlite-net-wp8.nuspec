@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata minClientVersion="2.5">
+    <id>sqlite-net-wp8</id>
+    <version>1.0.0</version>
+    <title>sqlite-net-wp8</title>
+    <authors>Peter Huene</authors>
+    <description>A C++/CX wrapper for SQLite functions that sqlite-net depends on. Can be used as an alternative to csharp-sqlite on Windows Phone 8. This library is released under the MIT license.</description>
+    <language>en-US</language>
+    <projectUrl>https://github.com/peterhuene/sqlite-net-wp8</projectUrl>
+    <licenseUrl>https://github.com/peterhuene/sqlite-net-wp8/blob/master/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <references>
+      <reference file="Sqlite.winmd" />
+    </references>
+  </metadata>
+  <files>
+    <file src="Release\Sqlite\Sqlite.dll" target="build\windowsphone8\x86\" />
+    <file src="Release\Sqlite\Sqlite.winmd" target="build\windowsphone8\x86\" />
+    <file src="ARM\Release\Sqlite\Sqlite.dll" target="build\windowsphone8\ARM\" />
+    <file src="ARM\Release\Sqlite\Sqlite.winmd" target="build\windowsphone8\ARM\" />
+    <file src="sqlite-net-wp8.props" target="build\windowsphone8\" />
+    <file src="sqlite-net-wp8.targets" target="build\windowsphone8\" />
+    <file src="Release\Sqlite\Sqlite.dll" target="lib\windowsphone8\" />
+    <file src="Release\Sqlite\Sqlite.winmd" target="lib\windowsphone8\" />
+  </files>
+</package>
