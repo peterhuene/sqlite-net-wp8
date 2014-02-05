@@ -8,9 +8,9 @@ This library can be used to directly call into sqlite3.dll on Windows Phone 8 fr
 Requirements
 ============
 
-* Visual Studio 2012
+* Visual Studio 2012 or later
 * Windows Phone 8.0 SDK
-* SQLite for Windows Phone (install via the "Tools -> Extensions and Updates" menu item in Visual Studio).
+* [SQLite for Windows Phone 8](http://www.sqlite.org/download.html)
 
 Remarks
 ======
@@ -24,10 +24,11 @@ However, sqlite-net currently won't work with this library as it has a dependenc
 Using sqlite-net-wp8
 ====================
 
-* Clone or copy the sqlite-net-wp8 source files into your solution directory.
-* Add the Sqlite.vcxproj project to your solution (File -> Add -> Existing Project).
-* From your Windows Phone project, add a project reference to the Sqlite project (Project -> Add Reference -> Solution -> Projects).
-* Clone or copy the [sqlite-net](https://github.com/peterhuene/sqlite-net) source files (src/SQLite.cs and src/SQLiteAsync.cs) into your Windows Phone project.
+* Install the [sqlite-net-wp8 nuget package](https://www.nuget.org/packages/sqlite-net-wp8/) into your WP8 project:
+    * Select Project -> Manage NuGet Packages...
+	* Select Online -> nuget.org
+	* Search for `sqlite-net-wp8` and install the package.
+* Clone or copy the [sqlite-net](https://github.com/peterhuene/sqlite-net) source files (src/SQLite.cs and src/SQLiteAsync.cs) into your WP8 project.
 * Add "USE_WP8_NATIVE_SQLITE" as a conditional build symbol to your project containing the sqlite-net source files (without this, SQLite will use csharp-sqlite):
     * Project -> Properties
     * Click on the Build tab.

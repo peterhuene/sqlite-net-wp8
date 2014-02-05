@@ -6,6 +6,7 @@
     <title>sqlite-net-wp8</title>
     <authors>Peter Huene</authors>
     <description>A C++/CX wrapper for SQLite functions that sqlite-net depends on. Can be used as an alternative to csharp-sqlite on Windows Phone 8. This library is released under the MIT license.</description>
+    <tags>sqlite sqlite-net wp8 winphone</tags>
     <language>en-US</language>
     <projectUrl>https://github.com/peterhuene/sqlite-net-wp8</projectUrl>
     <licenseUrl>https://github.com/peterhuene/sqlite-net-wp8/blob/master/LICENSE.txt</licenseUrl>
