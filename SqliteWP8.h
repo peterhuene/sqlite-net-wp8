@@ -92,5 +92,6 @@ namespace Sqlite
         static Platform::Array<uint8>^ sqlite3_column_blob(Statement^, int index);
         static int sqlite3_column_bytes(Statement^ statement, int index);
         static int sqlite3_enable_load_extension(Database^ db, int onoff);
+        static int sqlite3_extended_errcode(Database^ db);
     };
 }

@@ -269,3 +269,8 @@ int Sqlite3::sqlite3_enable_load_extension(Database^ db, int onoff)
     // sqlite3.lib provided by "SQL For Windows Phone" doesn't seem to define it
     return 1;	// Error
 }
+
+int Sqlite3::sqlite3_extended_errcode(Database^ db)
+{
+    return ::sqlite3_extended_errcode(db ? db->Handle : nullptr);
+}
