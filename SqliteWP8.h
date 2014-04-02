@@ -93,5 +93,6 @@ namespace Sqlite
         static int sqlite3_column_bytes(Statement^ statement, int index);
         static int sqlite3_enable_load_extension(Database^ db, int onoff);
         static int sqlite3_extended_errcode(Database^ db);
+        static int set_temp_directory(Platform::String^ value);
     };
 }

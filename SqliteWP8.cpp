@@ -267,10 +267,18 @@ int Sqlite3::sqlite3_enable_load_extension(Database^ db, int onoff)
     // Dummy stub to make sqlite-net work (note: sqlite-net doesn't use it directly)
     // While sqlite3_enable_load_extension is declared in sqlite3.h, 
     // sqlite3.lib provided by "SQL For Windows Phone" doesn't seem to define it
-    return 1;	// Error
+    return SQLITE_ERROR;
 }
 
 int Sqlite3::sqlite3_extended_errcode(Database^ db)
 {
     return ::sqlite3_extended_errcode(db ? db->Handle : nullptr);
+}
+
+int Sqlite3::set_temp_directory(String^ value)
+{
+    // This is not a sqlite3 function, but a utility method for setting the temp directory
+    auto value_buffer = convert_to_utf8_buffer(value);
+    sqlite3_temp_directory = sqlite3_mprintf("%s", value_buffer.data());
+    return SQLITE_OK;
 }

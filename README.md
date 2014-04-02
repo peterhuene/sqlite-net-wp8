@@ -32,3 +32,14 @@ Using sqlite-net-wp8
     * In the "Platform" dropdown, select "All platforms".
     * Append ";USE_WP8_NATIVE_SQLITE" to the "Conditional compilation symbols" textbox.
 * Use sqlite-net as you normally would.
+
+Setting the SQLite Temporary Directory
+======================================
+
+If you are executing SQLite commands that require the temporary directory to be set,
+call `Sqlite3.set_temp_directory` before opening your database with `sqlite-net`:
+
+    Sqlite3.set_temp_directory(Windows.Storage.ApplicationData.Current.LocalFolder.Path);
+
+I will open a pull request to `sqlite-net` to automatically do this when opening a database,
+but for now you can call this method directly.
