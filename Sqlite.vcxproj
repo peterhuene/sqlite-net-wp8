@@ -145,7 +145,7 @@
     <ClCompile Include="SqliteWP8.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="SQLite.WP80, Version=3.8.4.2" />
+    <SDKReference Include="SQLite.WP80, Version=3.8.4.3" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
