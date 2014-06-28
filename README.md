@@ -1,3 +1,8 @@
+Call for contributors
+=====================
+
+I no longer have a Windows Phone device or the time to properly maintain this project. Therefore, I'm asking for someone to take over this project as either the official fork or I can add that person as a contributor to this repository.  Please contact me at \<mygithubusername\>@gmail.com.  Thanks!
+
 sqlite-net-wp8
 ==============
 
