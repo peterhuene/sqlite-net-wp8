@@ -17,6 +17,14 @@
       <Configuration>Release</Configuration>
       <Platform>ARM</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="x86|ARM">
+      <Configuration>x86</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="x86|Win32">
+      <Configuration>x86</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{59b35f6c-e062-4f0e-88d8-13f3f82a24f3}</ProjectGuid>
