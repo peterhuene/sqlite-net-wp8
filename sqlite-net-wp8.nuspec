@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata minClientVersion="2.5">
     <id>sqlite-net-wp8</id>
-    <version>3.8.6</version>
+    <version>3.8.7.4</version>
     <title>sqlite-net-wp8</title>
     <authors>Peter Huene</authors>
     <description>A C++/CX wrapper for SQLite functions that sqlite-net depends on. Can be used as an alternative to csharp-sqlite on Windows Phone 8. This library is released under the MIT license.</description>
