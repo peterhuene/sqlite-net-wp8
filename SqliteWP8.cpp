@@ -153,6 +153,11 @@ int64 Sqlite3::sqlite3_last_insert_rowid(Database^ db)
     return ::sqlite3_last_insert_rowid(db ? db->Handle : nullptr);
 }
 
+void Sqlite3::sqlite3_interrupt(Database^ db)
+{
+	::sqlite3_interrupt(db ? db->Handle : nullptr);
+}
+
 String^ Sqlite3::sqlite3_errmsg(Database^ db)
 {
     return convert_to_string(::sqlite3_errmsg(db ? db->Handle : nullptr));
