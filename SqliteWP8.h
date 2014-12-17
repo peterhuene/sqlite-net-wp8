@@ -74,6 +74,7 @@ namespace Sqlite
         static int sqlite3_reset(Statement^ statement);
         static int sqlite3_finalize(Statement^ statement);
         static int64 sqlite3_last_insert_rowid(Database^ db);
+        static void sqlite3_interrupt(Database^ db);
         static Platform::String^ sqlite3_errmsg(Database^ db);
         static int sqlite3_bind_parameter_index(Statement^ statement, Platform::String^ name);
         static int sqlite3_bind_null(Statement^ statement, int index);
