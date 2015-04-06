@@ -67,6 +67,7 @@ namespace Sqlite
         static int sqlite3_open(Platform::String^ filename, Database^* db);
         static int sqlite3_open_v2(Platform::String^ filename, Database^* db, int flags, Platform::String^ zVfs);
         static int sqlite3_close(Database^ db);
+        static int sqlite3_close_v2(Database^ db);
         static int sqlite3_busy_timeout(Database^ db, int miliseconds);
         static int sqlite3_changes(Database^ db);
         static int sqlite3_prepare_v2(Database^ db, Platform::String^ query, Statement^* statement);

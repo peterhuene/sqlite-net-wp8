@@ -106,6 +106,11 @@ int Sqlite3::sqlite3_close(Database^ db)
     return::sqlite3_close(db ? db->Handle : nullptr);
 }
 
+int Sqlite3::sqlite3_close_v2(Database^ db)
+{
+    return::sqlite3_close_v2(db ? db->Handle : nullptr);
+}
+
 int Sqlite3::sqlite3_busy_timeout(Database^ db, int miliseconds)
 {
     return ::sqlite3_busy_timeout(db ? db->Handle : nullptr, miliseconds);
